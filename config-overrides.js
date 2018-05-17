@@ -46,8 +46,8 @@ module.exports = {
       // aggregateTimeout 为 delay 意为1000毫秒之后没有修改才会进行刷新
       // poll 为每5000毫秒检查一次 的确很消耗性能 非vagrant共享目录下开发请关闭
       // 时间可以酌情添加
-      config.watchOptions.aggregateTimeout = 1000;
-      config.watchOptions.poll = 5000;
+      config.watchOptions.aggregateTimeout = 300;
+      config.watchOptions.poll = 1000;
       return config;
     };
   }

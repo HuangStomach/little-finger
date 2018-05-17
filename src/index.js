@@ -1,4 +1,4 @@
-import 'bulma/css/bulma.css?raw'
+//import 'bulma/css/bulma.css?raw'
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'mobx-react'

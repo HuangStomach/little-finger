@@ -4,6 +4,7 @@ import Loadable from 'react-loadable';
 import { observer } from 'mobx-react';
 
 import Links from '@/Links';
+import ServerList from '@/ServerList';
 const User = Loadable({loader: () => import(/* webpackChunkName: "user" */  'view/User'), loading: () => null});
 const Repo = Loadable({loader: () => import(/* webpackChunkName: "repo" */  'view/Repo'), loading: () => null});
 const Repos = Loadable({loader: () => import(/* webpackChunkName: "repos" */  'view/Repos'), loading: () => null});
@@ -16,16 +17,9 @@ class App extends Component {
         <div className="hero-body">
           <div className="container">
             <h1 className="title">
-              Gini React Template
-            </h1>
-            <h2 className="subtitle">
-              基理react模板
-            </h2>
-            <Links/>
-            <Route exact path="/" component={User}/>
-            <Route path="/user" component={User}/>
-            <Route path="/repos" component={Repos}/>
-            <Route path="/repo/:name" component={Repo}/>
+              服务器列表
+            </h1>         
+            <ServerList />
           </div>
         </div>
       </section>
