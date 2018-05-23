@@ -30,23 +30,21 @@ class ServerItem extends React.Component{
       
       dataNode.push(opt);
     });
-    console.log(dataNode);
+    // console.log(dataNode);
     // 绘制图表
       myChart.setOption({
         title: {
           text: '服务器状态显示'
         },
         tooltip: {
-          formatter: '{b}',
           trigger: 'item',
-        //   formatter: function (dataNode) {
-        //         for (var i=0;i<dataNode.length;i++){
-        //           return ('name'+dataNode[i].name+
-        //                     '<br/>fqdn'+dataNode[i].fqdn+
-        //                     '<br/>address'+dataNode[i].address+
-        //                     '<br/>update'+dataNode[i].update)
-        //        }
-        //   }
+          formatter: function (dataNode) {
+            return ('name : '+dataNode.data.name+
+              '<br/>fqdn : '+dataNode.data.fqdn+
+              '<br/>address : '+dataNode.data.address+
+              '<br/>updata: '+dataNode.data.updata
+            )   
+          }
         },
         legend: {
           data:['name','fqdn','address','update']
@@ -57,7 +55,6 @@ class ServerItem extends React.Component{
           {
             type: 'graph',
             layout: 'force',
-            // symbolSize: 90,
             roam: false,
             label: {
               normal: {
@@ -67,7 +64,7 @@ class ServerItem extends React.Component{
             force: {
               repulsion: 100,
               edgeLength: 80,
-              gravity:1
+              gravity:.8
             },    
             data: dataNode, 
           }
