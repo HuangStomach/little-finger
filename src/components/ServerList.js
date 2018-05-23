@@ -4,27 +4,48 @@ import ServerItem from '@/ServerItem';
 
 //列表容器
 class ServerList extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state={
-            value:[   
-                {name:'服务器一',fqdn:'124',fqdn:'这是啥1',address:'127:0.0.1'},//每一个服务器的数据
-                {name:'服务器二',fqdn:'124',fqdn:'这是啥2',address:'127:0.0.1'},
-                {name:'服务器三',fqdn:'124',fqdn:'这是啥3',address:'127:0.0.1'},
-                {name:'服务器四',fqdn:'124',fqdn:'这是啥4',address:'127:0.0.1'},
-                {name:'服务器五',fqdn:'124',fqdn:'这是啥5',address:'127:0.0.1'},
-            ]
-        }
-        
+  constructor(props) {
+    super(props);
+    this.state={
+      value:[  
+        {name:'服务器一',fqdn:'e160302.server.genee.cn',address:'127:0.0.1',status:'',free:'0',top:'0',level:'0',active:'0',
+        updata:'0000-00-00 00:00:00',id:'184',_extra:''},//每一个服务器的数据
+        {name:'服务器二',fqdn:'e160302.server.genee.cn',address:'127:0.0.1',status:'',free:'0',top:'0',level:'0',active:'1',
+        updata:'0000-00-00 00:00:00',id:'185',_extra:''},
+        {name:'服务器三',fqdn:'e160302.server.genee.cn',address:'127:0.0.1',status:'',free:'0',top:'0',level:'0',active:'0',
+        updata:'0000-00-00 00:00:00',id:'123',_extra:''},
+        {name:'服务器四',fqdn:'e160302.server.genee.cn',address:'127:0.0.1',status:'',free:'0',top:'0',level:'0',active:'1',
+        updata:'0000-00-00 00:00:00',id:'245',_extra:''},
+        {name:'服务器五',fqdn:'e160302.server.genee.cn',address:'127:0.0.1',status:'',free:'0',top:'0',level:'0',active:'0',
+        updata:'0000-00-00 00:00:00',id:'',_extra:''},
+        {name:'服务器六',fqdn:'e160302.server.genee.cn',address:'127:0.0.1',status:'',free:'0',top:'0',level:'0',active:'0',
+        updata:'0000-00-00 00:00:00',id:'',_extra:''},
+        {name:'服务器七',fqdn:'e160302.server.genee.cn',address:'127:0.0.1',status:'',free:'0',top:'0',level:'0',active:'1',
+        updata:'0000-00-00 00:00:00',id:'',_extra:''},
+        {name:'服务器八',fqdn:'e160302.server.genee.cn',address:'127:0.0.1',status:'',free:'0',top:'0',level:'0',active:'0',
+        updata:'0000-00-00 00:00:00',id:'',_extra:''},
+        {name:'服务器九',fqdn:'e160302.server.genee.cn',address:'127:0.0.1',status:'',free:'0',top:'0',level:'0',active:'0',
+        updata:'0000-00-00 00:00:00',id:'',_extra:''},
+        {name:'服务器十',fqdn:'e160302.server.genee.cn',address:'127:0.0.1',status:'',free:'0',top:'0',level:'0',active:'1',
+        updata:'0000-00-00 00:00:00',id:'',_extra:''},
+        {name:'服务器十一',fqdn:'e160302.server.genee.cn',address:'127:0.0.1',status:'',free:'0',top:'0',level:'0',active:'0',
+        updata:'0000-00-00 00:00:00',id:'',_extra:''},
+        {name:'服务十二',fqdn:'e160302.server.genee.cn',address:'127:0.0.1',status:'',free:'0',top:'0',level:'0',active:'0',
+        updata:'0000-00-00 00:00:00',id:'',_extra:''},
+        {name:'服务器十三',fqdn:'e160302.server.genee.cn',address:'127:0.0.1',status:'',free:'0',top:'0',level:'0',active:'0',
+        updata:'0000-00-00 00:00:00',id:'',_extra:''},
+        {name:'服务器十四',fqdn:'e160302.server.genee.cn',address:'127:0.0.1',status:'',free:'0',top:'0',level:'0',active:'0',
+        updata:'0000-00-00 00:00:00',id:'',_extra:''},                           
+      ]
     }
-
-    render() {
-        return (
-            <div>
-                <ServerItem data={this.state.value}/>
-            </div>
-        )
-    }
+  }
+  render() {
+    return (
+      <React.Fragment>
+        <ServerItem data={this.state.value}/>
+      </React.Fragment>
+    )
+  }
 }
 
 export default ServerList;

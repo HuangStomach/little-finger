@@ -1,6 +1,15 @@
+.container{
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  width: 90%;
+  margin: 0 auto; 
+}
 .sitem{
-    margin-top: 10px;
+  border-bottom: 1px solid #ddd;
+  padding: 5px;
 }
 .sitem span{
-    margin-right: 10px;
+    /* border-right: 1px solid #ddd; */
+  padding-right: 5px
 }
