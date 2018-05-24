@@ -14,18 +14,46 @@ class ServerItem extends Component {
     const dataNode = [];
     this.props.data.map((item, index) => {
       const opt = {};
-      const x = Math.random()*(600-300+1)+300;
-      const y = Math.random()*(600-300+1)+300;
+      //const x = Math.random()*(600-300+1)+300;
+      const x = Math.random()*800+1;
+      //const y = Math.random()*(600-300+1)+300;
+      const y = Math.random()*800+1;
       opt.name = item.name;
       opt.x = x;
       opt.y = y;
-      opt.symbolSize = '35';
+      opt.symbolSize = '50';
       opt.fqdn = item.fqdn;
       opt.address = item.address;
       opt.update = item.update;
-      
+      switch(item.level) {
+        case '1':
+          opt.shadowColor = 'yellow';
+          opt.show = true;  
+          break;
+        case '2':
+          opt.shadowColor = 'orange';
+          opt.label = {
+            show: false
+          };
+          break;
+        case '3':
+          opt.shadowColor = 'green';
+          opt.show = true;
+          break;
+        case '4':
+          opt.shadowColor = 'red';
+          opt.label = {
+            show : false
+          }
+          break;
+        default:
+          opt.shadowColor = 'gray';
+          opt.show = true;
+      }
+
       return dataNode.push(opt);
     });
+    
     // 绘制图表
       myChart.setOption({
         title: {
@@ -34,13 +62,9 @@ class ServerItem extends Component {
         tooltip: {
           trigger: 'item',
           formatter: function (dataNode) {
-            return (
-              `name: ${dataNode.data.name}
-               <br/> fqdn: ${dataNode.data.fqdn} 
-               <br/> address: ${dataNode.data.address} 
-               <br/> update: ${dataNode.data.update}
-              `
-            )   
+            return(
+              `name: ${dataNode.data.name}<br/> fqdn: ${dataNode.data.fqdn}<br/> address: ${dataNode.data.address}<br/> update: ${dataNode.data.update}` 
+            )
           }
         },
         animationDurationUpdate: 1500,
@@ -49,18 +73,25 @@ class ServerItem extends Component {
           {
             type: 'graph',
             layout: 'force',
-            roam: false,
+            roam: false,     
+            force: {
+              repulsion: 100,
+              edgeLength: 50,
+              gravity: .2
+            },    
+            data: dataNode, 
+            itemStyle: {
+              normal: {
+                color : function(dataNode){
+                  return dataNode.data.shadowColor
+                },
+              }
+            },
             label: {
               normal: {
                 show: true
               }
-            },        
-            force: {
-              repulsion: 27,
-              edgeLength: 0,
-              gravity: .8
-            },    
-            data: dataNode, 
+            }
           }
         ]                    
       });
