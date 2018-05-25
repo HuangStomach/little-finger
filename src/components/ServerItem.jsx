@@ -6,6 +6,7 @@ import 'echarts/lib/chart/heatmap';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/grid';
+import style from './ServerItem.css';
 
 //列表项
 class ServerItem extends Component {
@@ -15,20 +16,20 @@ class ServerItem extends Component {
     //console.log(this.props.data);
     var x = 0,y = 0;
     this.props.data.forEach((element,index)=> {
-      element.x = x;
+      element.x = x; 
       element.y = y;
       x++;
-      if(x>=10) {
+      if(x>=20) {
         y++;
         x=0;
        }     
     });
     const data = this.props.data.map(function(item) {
       return {
-        value: [item.x, item.y, item.level],
+        value: [item.x, item.y, item.level, item.name, item.fqdn, item.address, item.update],
         itemStyle: {
         normal: {
-          color: 'rgb(255, 0, 0)',
+          color: item.level === '1'?'red':(item.level === '2'?'orange':(item.level === '3'?'yellow':(item.level === '4'?'green':'gray'))),
           borderColor: '#fff', //背景颜色
           borderWidth: 5,
           borderType: 'solid'
@@ -36,36 +37,70 @@ class ServerItem extends Component {
         }
       }
     });
-    let axisType = {
-      name: '',
-      type: 'category',
-      data: ['0', '1', '2', '3','4'],
-      axisLine: {
-        show: false
-      },
-      axisTick: {
-        show: false
-      },
-        axisLabel: {
-          show: false
-        }
-    };
+    //xAxis与yAxis参数设置需优化，暂时注释公共方法
+    // let axisType = {
+    //   name: '',
+    //   type: 'category',
+    //   data: new Array(20).fill(0),
+    //   axisLine: {
+    //     show: false
+    //   },
+    //   axisTick: {
+    //     show: false
+    //   },
+    //   axisLabel: {
+    //     show: false
+    //   }
+      
+    // };
+
     myChart.setOption({
       title: {
-        text: 'Awesome Chart'
+        text: ''
       },
       tooltip: {
         formatter: function(data) {
-          return `警报等级：${data.value[2]}`  
+          return `name: ${data.value[3]}<br/>fqdn: ${data.value[4]}<br>address: ${data.value[5]}<br>update: ${data.value[6]}`  
         }
       },
       grid: {
-        top: '20',
-        height: '50%',
-        width: '40%'
+        top: '15%',
+        height: '20%',
+        width: '100%',
+        left: ''
       },
-      xAxis: axisType,
-      yAxis: axisType,
+      xAxis: {
+        name: '',
+        type: 'category',
+        data: new Array(20).fill(0),
+        axisLine: {
+          show: false
+        },
+        axisTick: {
+          show: false
+        },
+        axisLabel: {
+          show: false
+        }
+        
+      },
+      yAxis:{
+        name: '',
+        type: 'category',
+        //data: new Array(20).fill(0),
+        axisLine: {
+          show: false
+        },
+        axisTick: {
+          show: false
+        },
+        axisLabel: {
+          show: false
+        },
+        inverse: true
+        
+      },
+     
       series: { 
         name: '2048',
         type: 'heatmap',
@@ -88,7 +123,7 @@ class ServerItem extends Component {
   }   
   render() {
     return (
-      <div id="main" style={{ width: 800, height: 800 }}></div>
+      <div id="main" className={style.container}></div>
     );    
   }    
 }
