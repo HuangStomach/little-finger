@@ -18,7 +18,7 @@ export default class Rest {
     if (path === null && query === null) return this;
 
     this._client = axios.create({
-      baseURL: this._configs ? this._configs.baseURL : 'https://api.github.com',
+      baseURL: this._configs ? this._configs.baseURL : 'http://123.59.41.56:4000',
       timeout: 5000,
     });
     
@@ -60,14 +60,16 @@ export default class Rest {
       .then(m => {
         model = m.default
         const client = axios.create({
-          baseURL: this._configs ? this._configs.baseURL : 'https://api.github.com',
+          baseURL: this._configs ? this._configs.baseURL : 'http://123.59.41.56:4000',
           timeout: 5000,
         });
     
-        return client.get(path ? path : name);
+        return client.get(path ? path : name, {
+          params: query
+        });
       })
       .then(r => {
-        const items = r.data.map(item => {
+        const items = r.data.data.map(item => {
           let object = new (model)();
           return setData(object, item);
         })

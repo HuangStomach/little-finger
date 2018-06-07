@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import ServerList from '@/ServerList';
+import List from 'view/Server/List';
 
 @observer
 class App extends Component {
@@ -12,7 +12,7 @@ class App extends Component {
             <h1 className="title">
               服务器列表
             </h1>         
-            <ServerList />
+            <List />
           </div>
         </div>
       </section>

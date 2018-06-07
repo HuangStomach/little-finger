@@ -1,5 +1,5 @@
-import repoStore from './modules/repo'
+import ServerStore from './modules/servers';
 
 export {
-  repoStore
+  ServerStore
 }
