@@ -6,9 +6,11 @@ import Style from './List.css';
 import echarts from 'echarts/lib/echarts';
 // 引入Graph图
 import 'echarts/lib/chart/heatmap';
+import 'echarts/lib/component/visualMap';
+import 'echarts/lib/component/graphic';
+
 // 引入提示框和标题组件
 import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/title';
 import 'echarts/lib/component/grid';
 
 @inject('ServerStore') @observer
@@ -31,7 +33,6 @@ class List extends Component {
 
   fetchServers() {
     this.props.ServerStore.list(this.start * this.step, this.step).then(servers => {
-      console.log(servers.length)
       if (servers.length >= (this.start + 1) * this.step) {
         this.start++
         this.fetchServers();
@@ -44,29 +45,35 @@ class List extends Component {
     const data = this.servers.map((item, index) => {
       return {
         value: [
-          index % unit , parseInt(index / unit, 10), item.level,
-          item.name, item.fqdn, item.address, item.update
+          index % unit, parseInt(index / unit, 10), parseInt(item.level, 10)
         ],
-        itemStyle: {
-        normal: {
-          color: item.level === '1'?'red':(item.level === '2'?'orange':(item.level === '3'?'yellow':(item.level === '4'?'green':'gray'))),
-         }
+        content: {
+          name: item.name,
+          fqdn: item.fqdn,
+          address: item.address,
+          update: item.update,
+          level: item.level
         }
       };
     });
 
     this.chart.setOption({
-      title: { text: '' },
       tooltip: {
         formatter(data) {
-          return `name: ${data.value[3]}<br/>fqdn: ${data.value[4]}<br>address: ${data.value[5]}<br>update: ${data.value[6]}`  
+          let content = data.data.content;
+          return `name: ${content.name}<br />
+          fqdn: ${content.fqdn}<br />
+          address: ${content.address}<br />
+          update: ${content.update}<br />
+          level: ${content.level}<br />`
         }
       },
       grid: {
+        top: 0,
         height: 'auto',
-        width: '100%',
-        left: 0,
-        right: 0
+        width: '90%',
+        left: '10%',
+        right: '0%'
       },
       xAxis: {
         name: '',
@@ -82,6 +89,20 @@ class List extends Component {
         axisTick: { show: false },
         axisLabel: { show: false },
         inverse: true // 服务器从上向下渲染, 符合观看习惯
+      },
+      visualMap: {
+        type: 'piecewise',
+        pieces: [
+          { value: 0, color: '#999999', label: '休眠' },
+          { value: 10, color: '#333333', label: '待机' },
+          { value: 20, color: '#00CC00', label: '正常' },
+          { value: 30, color: '#0099FF', label: '信息' },
+          { value: 40, color: '#FFCC00', label: '警告' },
+          { value: 50, color: '#FF0000', label: '错误' },
+          { value: 60, color: '#CC00FF', label: 'GG' },
+        ],
+        top: 0,
+        left: 0,
       },
       series: { 
         name: 'servers',
