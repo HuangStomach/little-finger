@@ -1,4 +1,4 @@
-//import 'bulma/css/bulma.css?raw'
+import 'antd/dist/antd.css?raw';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'mobx-react'
