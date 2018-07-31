@@ -47,13 +47,7 @@ class List extends Component {
         value: [
           index % unit, parseInt(index / unit, 10), parseInt(item.level, 10)
         ],
-        content: {
-          name: item.name,
-          fqdn: item.fqdn,
-          address: item.address,
-          update: item.update,
-          level: item.level
-        }
+        content: item
       };
     });
 
