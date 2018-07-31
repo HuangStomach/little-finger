@@ -4,7 +4,7 @@ import { HashRouter as Router, Switch, Route, NavLink} from 'react-router-dom';
 import {Layout, Menu, Breadcrumb, Icon} from 'antd';
 import List from "./view/Server/List";
 import ServerList from "./view/Server/ServerList";
-import  './App.less';
+import AppStyle from './App.css';
 
 const {Header, Footer, Sider, Content} = Layout;
 
@@ -20,7 +20,7 @@ class App extends Component {
       <Router>
         <Layout style={{minHeight: '100vh'}}>
           <Sider style={sideStyle}>
-            <h2 style={logoStyle}>Nagios</h2>
+            <h2 className={AppStyle.logo}>Nagios</h2>
             <Menu theme="dark" defaultSelectedKeys={['1']}  mode="inline">
               <Menu.Item key="1">
                 <Icon type="home"/>

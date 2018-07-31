@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { autorun, computed } from 'mobx';
+import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import { Table, Button } from 'antd';
+import { Table } from 'antd';
 
 @inject('ServerStore')
 @observer
@@ -12,7 +12,7 @@ class ServerList extends Component{
 
   render() {
     const columns = [
-      {title: '名称', dataIndex: 'name',width:'10vw'},
+      {title: '名称', dataIndex: 'name', width: '10vw'},
       {title: 'LAB', dataIndex: 'lab',width:'10vw'},
       {title: 'SITE', dataIndex: 'site',width:'10vw'},
       {title: 'FQDN', dataIndex: 'fqdn',width:'20vw'},
