@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {observer} from 'mobx-react';
-import { HashRouter as Router, Switch, Route, NavLink} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import {Layout, Breadcrumb } from 'antd';
 import List from "./view/Server/List";
 import ServerList from "./view/Server/ServerList";
@@ -22,6 +22,7 @@ class App extends Component {
           <Layout style={{ marginLeft: 200 }}>
             <Header className={AppStyle.header}/>
             <Content style={{padding: '0 16px', marginTop: 64}}>
+
               <Breadcrumb style={{margin: '16px 0'}}>
                 <Breadcrumb.Item>User</Breadcrumb.Item>
                 <Breadcrumb.Item>Bill</Breadcrumb.Item>
@@ -29,7 +30,8 @@ class App extends Component {
 
               <div className={AppStyle.content}>
                 <Switch>
-                  <Route exact path="/list" component={List}/>
+                  <Route exact path="/" component={List}/>
+                  <Route path="/list" component={List}/>
                   <Route path="/serverList" component={ServerList}/>
                 </Switch>
               </div>
