@@ -2,14 +2,14 @@ import axios from 'axios'
 
 let setData = (object, data) => {
   if (typeof object.setData === 'function') return object.setData(data);
-  
+
   for (let [key, value] of Object.entries(data)) {
     if (Reflect.has(object, key)) {
       Reflect.set(object, key, value)
     }
   }
   return object;
-}
+};
 
 //TODO: 全部三元运算符导入配置非常不优雅
 export default class Rest {
@@ -21,16 +21,10 @@ export default class Rest {
       baseURL: this._configs ? this._configs.baseURL : 'http://123.59.41.56:4000',
       timeout: 5000,
     });
-    
+
     this._name = this._configs ? this._configs.source : new.target.name.toLowerCase();
-    this._client.get(`${this._name}/${path}`, {
-      params: query
-    })
-    .then(r => {
-      setData(this, r.data);
-    })
-    .catch(e => {});
-    
+    this._client.get(`${this._name}/${path}`, {params: query}).then(r => {setData(this, r.data);}).catch(e => {});
+
   }
 
   async save() {
@@ -38,7 +32,7 @@ export default class Rest {
     const params = Object.assign({}, this);
     Reflect.deleteProperty(params, '_configs');
     Reflect.deleteProperty(params, '_client');
-    
+
     if (params.id > 0) return await this._client.post(this._name, params);
     else return await this._client.put(`${this._name}/${params.id}`, params);
   }
@@ -53,30 +47,31 @@ export default class Rest {
         reject();
         return;
       }
-      
+
       const name = this._configs ? this._configs.source : this.name.toLowerCase();
       let model;
       import(`model/${name}`)
-      .then(m => {
-        model = m.default
-        const client = axios.create({
-          baseURL: this._configs ? this._configs.baseURL : 'http://123.59.41.56:4000',
-          timeout: 5000,
-        });
-    
-        return client.get(path ? path : name, {
-          params: query
-        });
-      })
-      .then(r => {
-        const items = r.data.data.map(item => {
-          let object = new (model)();
-          return setData(object, item);
+        .then(m => {
+          model = m.default;
+          const client = axios.create({
+            baseURL: this._configs ? this._configs.baseURL : 'http://123.59.41.56:4000',
+            timeout: 5000,
+          });
+
+          return client.get(path ? path : name, {
+            params: query
+          });
         })
-        resolve(items)
-      }, r => {
-        reject()
-      });
+        .then(r => {
+          let total = r.data.total;
+          const items = r.data.data.map(item => {
+            let object = new (model)();
+            return setData(object, item);
+          });
+          resolve({items:items,total:total})
+        }, r => {
+          reject()
+        });
     });
   }
 

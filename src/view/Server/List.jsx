@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { autorun, computed } from 'mobx';
+import { observable, autorun, computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import Style from './List.css';
 
@@ -13,20 +13,26 @@ import 'echarts/lib/component/graphic';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/grid';
 
-@inject('ServerStore') @observer
+@inject('ServerStore')
+@observer
 class List extends Component {
   disposer = null;
   chart = null;
   start = 0;
-  step = 20;
+  step  = 10;
+
+  @observable list = [];
+
 
   @computed get servers() {
-    return this.props.ServerStore.servers;
+    return this.props.ServerStore.allServers;
   }
 
   componentDidMount() {
     // 基于准备好的dom，初始化echarts实例
     this.chart = echarts.init(document.getElementById('main'));
+    this.renderChart();
+    if (this.servers.length > 0) return;
     this.disposer = autorun(() => this.renderChart());
     this.fetchServers();
   }
@@ -34,10 +40,10 @@ class List extends Component {
   fetchServers() {
     this.props.ServerStore.list(this.start * this.step, this.step).then(servers => {
       if (servers.length >= (this.start + 1) * this.step) {
-        this.start++
+        this.start++;
         this.fetchServers();
       }
-    })
+    });
   }
 
   renderChart() {
@@ -55,11 +61,11 @@ class List extends Component {
       tooltip: {
         formatter(data) {
           let content = data.data.content;
-          return `name: ${content.name}<br />
-          fqdn: ${content.fqdn}<br />
-          address: ${content.address}<br />
-          update: ${content.update}<br />
-          level: ${content.level}<br />`
+          return `name: ${content.name}<br/>
+          fqdn: ${content.fqdn}<br/>
+          address: ${content.address}<br/>
+          update: ${content.update}<br/>
+          level: ${content.level}<br/>`
         }
       },
       grid: {
@@ -116,6 +122,7 @@ class List extends Component {
   render() {
     return (
       <div id="main" className={Style.container}></div>
+
     )
   }
 }

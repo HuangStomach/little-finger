@@ -15,7 +15,7 @@ module.exports = {
       'util': path.join(__dirname, './src/util'),
       'view': path.join(__dirname, './src/view'),
       'model': path.join(__dirname, './src/model'),
-      'store': path.join(__dirname, './src/store')
+      'store': path.join(__dirname, './src/store'),
     });
 
     // 增加css module的支持
