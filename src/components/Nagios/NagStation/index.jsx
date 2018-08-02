@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { observable, autorun, computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import Style from './List.css';
+import Style from './index.css';
 
 import echarts from 'echarts/lib/echarts';
 // 引入Graph图
@@ -15,32 +15,36 @@ import 'echarts/lib/component/grid';
 
 @inject('ServerStore')
 @observer
-class List extends Component {
+class NagStation extends Component {
   disposer = null;
   chart = null;
-  start = 0;
-  step  = 10;
 
   @observable list = [];
 
-
   @computed get servers() {
-    return this.props.ServerStore.allServers;
+    return this.props.ServerStore.servers;
+  }
+
+  @computed get start() {
+    return this.props.ServerStore.start;
   }
 
   componentDidMount() {
     // 基于准备好的dom，初始化echarts实例
     this.chart = echarts.init(document.getElementById('main'));
     this.renderChart();
-    if (this.servers.length > 0) return;
+    if (this.servers.length > 0 && this.start >= this.props.ServerStore.pages - 1) return;
     this.disposer = autorun(() => this.renderChart());
+    if(this.start !== 0){
+      this.props.ServerStore.handleStart(this.start + 1);
+    }
     this.fetchServers();
   }
 
   fetchServers() {
-    this.props.ServerStore.list(this.start * this.step, this.step).then(servers => {
-      if (servers.length >= (this.start + 1) * this.step) {
-        this.start++;
+    this.props.ServerStore.list(this.start).then(servers => {
+      if (this.start < this.props.ServerStore.pages - 1) {
+        this.props.ServerStore.handleStart(this.start + 1);
         this.fetchServers();
       }
     });
@@ -104,7 +108,7 @@ class List extends Component {
         top: 0,
         left: 0,
       },
-      series: { 
+      series: {
         name: 'servers',
         type: 'heatmap',
         data,
@@ -127,4 +131,4 @@ class List extends Component {
   }
 }
 
-export default List;
+export default NagStation;

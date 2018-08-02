@@ -68,7 +68,7 @@ export default class Rest {
             let object = new (model)();
             return setData(object, item);
           });
-          resolve({items:items,total:total})
+          resolve({ items, total })
         }, r => {
           reject()
         });
