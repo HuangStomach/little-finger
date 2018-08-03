@@ -17,9 +17,19 @@ class Servers {
   };
 
   @action
-  list = (start = 0) => {
+  list = async (start = 0) => {
+    let realStart = Math.ceil(this.servers.length / this.step);
+    if(realStart <= start){
+      for(let i = realStart; i <= start; i++ ){
+        await this.getList(i);
+      }
+    }
+  };
+
+  @action
+   getList = (start = 0) => {
     start *= this.step;
-    if (this.total != -1 && this.total <= this.servers.length) return Promise.resolve(this.servers);
+    if (this.total !== -1 && this.total <= this.servers.length) return Promise.resolve(this.servers);
 
     return Server
     .find({

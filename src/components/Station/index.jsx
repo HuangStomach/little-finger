@@ -15,7 +15,7 @@ import 'echarts/lib/component/grid';
 
 @inject('ServerStore')
 @observer
-class NagStation extends Component {
+class Station extends Component {
   disposer = null;
   chart = null;
 
@@ -131,4 +131,4 @@ class NagStation extends Component {
   }
 }
 
-export default NagStation;
+export default Station;

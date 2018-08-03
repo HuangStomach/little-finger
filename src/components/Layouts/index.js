@@ -1,12 +1,10 @@
 import React from "react";
 import {Layout, Breadcrumb} from 'antd';
 import {BrowserRouter as Router, Route} from 'react-router-dom'
-import AppStyle from '../App.css';
+import AppStyle from './index.css';
 import Menus from "./Menus";
-import {ROUTES} from "../config/routes.config";
-import _ from "lodash";
+import {ROUTES as routes} from "../../config/routes.config";
 
-const routes = _.clone(ROUTES);
 
 class Layouts extends React.Component {
 
@@ -18,7 +16,7 @@ class Layouts extends React.Component {
   }
 
   updateActive = (key) => {
-    let index = _.findIndex(routes, route => route.key === key);
+    let index = routes.findIndex(route => route.key === key);
     this.setState({current: routes[index]['text']});
   };
 
@@ -44,7 +42,7 @@ class Layouts extends React.Component {
                 }
               </div>
             </Content>
-            <Footer style={{textAlign: 'center'}}>Nagios ©2018 Created by Genee.</Footer>
+            {/*<Footer style={{textAlign: 'center'}}>Nagios ©2018 Created by Genee.</Footer>*/}
           </Layout>
         </Layout>
       </Router>

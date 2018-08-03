@@ -5,10 +5,7 @@
   "dependencies": {
     "antd": "^3.7.2",
     "axios": "^0.17.1",
-    "bulma": "^0.6.2",
     "echarts": "^4.1.0",
-    "less": "^3.8.0",
-    "lodash": "^4.17.10",
     "mobx": "^3.4.1",
     "mobx-react": "^4.3.5",
     "prop-types": "^15.6.2",

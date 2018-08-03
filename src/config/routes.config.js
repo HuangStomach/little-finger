@@ -1,28 +1,23 @@
-import AsyncCompnent from "../components/common/HighOrderComponents/AsyncComponent";
+import React from 'react';
+import Loadable from 'react-loadable';
 
-const PageHome = AsyncCompnent(() => import("../view/PageHome.jsx"));
-const PageList = AsyncCompnent(() => import("../view/PageList.jsx"));
-const PageStation = AsyncCompnent(() => import("../view/PageStation.jsx"));
+const Loading = () => <div>Loading...</div>;
+const Lists = Loadable({loader: () => import("../view/Lists.jsx"), loading: Loading});
+const Stations = Loadable({loader: () => import("../view/Stations.jsx"), loading: Loading,});
 
 const ROUTES = [
   {
-    key: '/',
+    key: 'Stations',
     link: '/',
-    iconType: 'home',
-    text: 'Home',
-    component: PageHome
-  }, {
-    key: 'Station',
-    link: '/station',
     iconType: 'profile',
     text: '监控台',
-    component: PageStation
+    component: Stations
   }, {
-    key: 'List',
+    key: 'Lists',
     link: '/list',
-    iconType: 'profile',
+    iconType: 'table',
     text: '服务器列表',
-    component: PageList
+    component: Lists
   },
 ];
 

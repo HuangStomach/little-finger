@@ -2,10 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {Menu, Icon} from "antd";
 import {Link} from 'react-router-dom';
-import {ROUTES} from "../config/routes.config";
-import _ from "lodash";
-
-const routes = _.clone(ROUTES);
+import {ROUTES as routes} from "../../config/routes.config";
 
 class Menus extends React.Component {
 
@@ -18,7 +15,7 @@ class Menus extends React.Component {
 
   componentDidMount() {
     let pathname = this.context.router.route.location.pathname;
-    let index = _.findIndex(routes, route => route.link === pathname);
+    let index = routes.findIndex(route => route.link === pathname);
     this.setState({activeKey: routes[index]['key']});
     this.props.updateActive(routes[index]['key']);
   }
@@ -29,7 +26,6 @@ class Menus extends React.Component {
   };
 
   render() {
-
     return (
       <Menu
         theme="dark"
@@ -40,7 +36,10 @@ class Menus extends React.Component {
         {
           routes.map((route) =>
             <Menu.Item key={route.key}>
-              <Link to={route.link}><Icon type={route.iconType}/><b>{route.text}</b></Link>
+              <Link to={route.link}>
+                <Icon type={route.iconType}/>
+                <span>{route.text}</span>
+              </Link>
             </Menu.Item>
           )
         }
