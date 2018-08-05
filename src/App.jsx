@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import Layouts from "./components/Layouts/index";
+import Layout from "view/Layout/Index";
 
 class App extends Component {
   render() {
     return (
-      <Layouts/>
+      <Layout/>
     );
   }
 }
