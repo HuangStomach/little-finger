@@ -1,22 +1,23 @@
 import { observable, action } from 'mobx';
 import Loadable from 'react-loadable';
-const Lists = Loadable({loader: () => import('view/Lists'), loading: () => null});
-const Stations = Loadable({loader: () => import('view/Stations'), loading: () => null});
+
+const List = Loadable({loader: () => import('view/List'), loading: () => null});
+const Dashboard = Loadable({loader: () => import('view/Dashboard'), loading: () => null});
 
 class Routes {
   @observable current = null;
   children = {
-    'stations': {
+    'dashboard': {
       path: '/', 
       icon: 'profile', 
       text: '监控台', 
-      component: Stations
+      component: Dashboard
     }, 
-    'lists': {
+    'list': {
       path: '/list',
       icon: 'table',
       text: '服务器',
-      component: Lists
+      component: List
     }
   };
 

@@ -12,6 +12,8 @@ const { Sider, Header, Content } = Layout;
 @observer
 class Layouts extends React.Component {
   @computed get title() {
+    // 利用current的key来去寻找对应route的text 默认为空
+    // 各Route对应组件会在mount后设置current
     if (Routes.current == null) return '';
     return Reflect.get(Routes.children, Routes.current).text;
   }

@@ -33,20 +33,15 @@ class Station extends Component {
     // 基于准备好的dom，初始化echarts实例
     this.chart = echarts.init(document.getElementById('main'));
     this.renderChart();
-    if (this.servers.length > 0 && this.start >= this.props.ServerStore.pages - 1) return;
+    
     this.disposer = autorun(() => this.renderChart());
-    if(this.start !== 0){
-      this.props.ServerStore.handleStart(this.start + 1);
-    }
     this.fetchServers();
   }
 
   fetchServers() {
-    this.props.ServerStore.list(this.start).then(servers => {
-      if (this.start < this.props.ServerStore.pages - 1) {
-        this.props.ServerStore.handleStart(this.start + 1);
-        this.fetchServers();
-      }
+    this.props.ServerStore.list().then(() => {
+      if (this.props.ServerStore.total === this.servers.length) return;
+      this.fetchServers();
     });
   }
 
@@ -126,7 +121,6 @@ class Station extends Component {
   render() {
     return (
       <div id="main" className={Style.container}></div>
-
     )
   }
 }
