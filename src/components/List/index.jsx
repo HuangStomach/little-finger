@@ -49,7 +49,7 @@ class List extends React.Component {
       this.props.ServerStore.list(Math.min(50, step)).then(() => {
         // 当请求达到了预期或请求已经完成时则不再发起请求
         if (this.servers.length >= excpet 
-        || this.servers.length == this.props.ServerStore.total) {
+        || this.servers.length === this.props.ServerStore.total) {
           this.loading = false
           return;
         }
