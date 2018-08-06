@@ -13,7 +13,7 @@ import 'echarts/lib/component/graphic';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/grid';
 
-@inject('ServerStore')
+@inject('SiteStore')
 @observer
 class Station extends Component {
   disposer = null;
@@ -21,12 +21,12 @@ class Station extends Component {
 
   @observable list = [];
 
-  @computed get servers() {
-    return this.props.ServerStore.servers;
+  @computed get sites() {
+    return this.props.SiteStore.sites;
   }
 
   @computed get start() {
-    return this.props.ServerStore.start;
+    return this.props.SiteStore.start;
   }
 
   componentDidMount() {
@@ -39,15 +39,15 @@ class Station extends Component {
   }
 
   fetchServers() {
-    this.props.ServerStore.list().then(() => {
-      if (this.props.ServerStore.total === this.servers.length) return;
+    this.props.SiteStore.list().then(() => {
+      if (this.props.SiteStore.total === this.sites.length) return;
       this.fetchServers();
     });
   }
 
   renderChart() {
-    let unit = Math.ceil(Math.sqrt(this.servers.length)) + 2;
-    const data = this.servers.map((item, index) => {
+    let unit = Math.ceil(Math.sqrt(this.sites.length)) + 2;
+    const data = this.sites.map((item, index) => {
       return {
         value: [
           index % unit, parseInt(index / unit, 10), parseInt(item.level, 10)

@@ -1,4 +1,5 @@
-import axios from 'axios'
+import axios from 'axios';
+import qs from 'qs';
 
 let setData = (object, data) => {
   if (typeof object.setData === 'function') return object.setData(data);
@@ -16,6 +17,7 @@ export default class Rest {
 
   constructor(path = null, query = null) {
     this._name = this._configs ? this._configs.source : new.target.name.toLowerCase();
+
     this._client = axios.create({
       baseURL: this._configs ? this._configs.baseURL : 'http://123.59.41.56:4000',
       timeout: 5000,
@@ -32,8 +34,8 @@ export default class Rest {
     Reflect.deleteProperty(params, '_configs');
     Reflect.deleteProperty(params, '_client');
 
-    if (params.id == 0) return await this._client.post(this._name, params);
-    else return await this._client.put(`${this._name}/${params.id}`, params);
+    if (params.id == 0) return await this._client.post(this._name, qs.stringifyparams);
+    else return await this._client.put(`${this._name}/${params.id}`, qs.stringify(params));
   }
 
   async delete() {

@@ -1,5 +1,5 @@
-import ServerStore from './modules/servers';
+import SiteStore from './modules/sites';
 
 export {
-  ServerStore
+  SiteStore
 }
