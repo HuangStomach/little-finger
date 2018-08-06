@@ -15,16 +15,15 @@ let setData = (object, data) => {
 export default class Rest {
 
   constructor(path = null, query = null) {
-    if (path === null && query === null) return this;
-
+    this._name = this._configs ? this._configs.source : new.target.name.toLowerCase();
     this._client = axios.create({
       baseURL: this._configs ? this._configs.baseURL : 'http://123.59.41.56:4000',
       timeout: 5000,
     });
 
-    this._name = this._configs ? this._configs.source : new.target.name.toLowerCase();
-    this._client.get(`${this._name}/${path}`, {params: query}).then(r => {setData(this, r.data);}).catch(e => {});
+    if (path === null && query === null) return this;
 
+    this._client.get(`${this._name}/${path}`, {params: query}).then(r => {setData(this, r.data);}).catch(e => {});
   }
 
   async save() {
@@ -33,7 +32,7 @@ export default class Rest {
     Reflect.deleteProperty(params, '_configs');
     Reflect.deleteProperty(params, '_client');
 
-    if (params.id > 0) return await this._client.post(this._name, params);
+    if (params.id == 0) return await this._client.post(this._name, params);
     else return await this._client.put(`${this._name}/${params.id}`, params);
   }
 
