@@ -54,8 +54,7 @@ class Station extends Component {
         ],
         content: item
       };
-    });
-
+    }); 
     this.chart.setOption({
       tooltip: {
         formatter(data) {
@@ -91,15 +90,7 @@ class Station extends Component {
       },
       visualMap: {
         type: 'piecewise',
-        pieces: [
-          { value: 0, color: '#999999', label: '休眠' },
-          { value: 10, color: '#333333', label: '待机' },
-          { value: 20, color: '#00CC00', label: '正常' },
-          { value: 30, color: '#0099FF', label: '信息' },
-          { value: 40, color: '#FFCC00', label: '警告' },
-          { value: 50, color: '#FF0000', label: '错误' },
-          { value: 60, color: '#CC00FF', label: 'GG' },
-        ],
+        pieces: Object.values(this.props.SiteStore.status),
         top: 0,
         left: 0,
       },

@@ -3,6 +3,7 @@ import Rest from 'util/rest';
 
 export default class Site extends Rest {
   id = 0;
+  key = '';//用于
   name = '';
   lab = '';
   site = '';

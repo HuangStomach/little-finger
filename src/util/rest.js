@@ -12,34 +12,31 @@ let setData = (object, data) => {
   return object;
 };
 
+const instance = axios.create({
+  baseURL: 'http://123.59.41.56:4000',
+  timeout: 5000,
+});
+
 //TODO: 全部三元运算符导入配置非常不优雅
 export default class Rest {
-
   constructor(path = null, query = null) {
     this._name = this._configs ? this._configs.source : new.target.name.toLowerCase();
-
-    this._client = axios.create({
-      baseURL: this._configs ? this._configs.baseURL : 'http://123.59.41.56:4000',
-      timeout: 5000,
-    });
-
     if (path === null && query === null) return this;
-
-    this._client.get(`${this._name}/${path}`, {params: query}).then(r => {setData(this, r.data);}).catch(e => {});
+    instance.get(`${this._name}/${path}`, {params: query}).then(r => {setData(this, r.data);}).catch(e => {});
   }
-
+  
   async save() {
     // 需要做简单的值拷贝并去掉约定的私有属性
     const params = Object.assign({}, this);
     Reflect.deleteProperty(params, '_configs');
     Reflect.deleteProperty(params, '_client');
 
-    if (params.id == 0) return await this._client.post(this._name, qs.stringifyparams);
-    else return await this._client.put(`${this._name}/${params.id}`, qs.stringify(params));
+    if (params.id === 0) return await instance.post(this._name, qs.stringify(params));
+    else return await instance.put(`${this._name}/${params.id}`, qs.stringify(params));
   }
 
   async delete() {
-    return await this._client.delete(`${this._name}/${this.id}`);
+    return await instance.delete(`${this._name}/${this.id}`);
   }
 
   static find(query = {}, path = null) {
@@ -54,12 +51,7 @@ export default class Rest {
       import(`model/${name}`)
         .then(m => {
           model = m.default;
-          const client = axios.create({
-            baseURL: this._configs ? this._configs.baseURL : 'http://123.59.41.56:4000',
-            timeout: 5000,
-          });
-
-          return client.get(path ? path : name, {
+          return instance.get(path ? path : name, {
             params: query
           });
         })
@@ -75,5 +67,4 @@ export default class Rest {
         });
     });
   }
-
 }

@@ -1,8 +1,10 @@
 import React, {Fragment} from "react";
-import { Table } from "antd";
+import { Table, message, Tag } from "antd";
 import { computed, observable, trace } from "mobx";
 import { inject, observer,  } from 'mobx-react';
-import CollectionEditForm from './edit'
+import CollectionEditForm from './edit';
+import AdvancedSearchForm from './search';
+
 
 @inject('SiteStore')
 @observer
@@ -12,14 +14,22 @@ class List extends React.Component {
   @observable visible = false;
   @observable pagination = { size: 'big', pageSize: 20 };
   @observable loading = false;
+
+  renderTag = record => {
+    let item = Reflect.get(this.props.SiteStore.status, record.level);
+    return (
+      <Tag color={item.color}>{item.label}</Tag>
+    );
+  }
+
   columns = [
-    { title: '名称', dataIndex: 'name', key: "name" }, 
-    { title: 'LAB', dataIndex: 'lab', key: 'lab' }, 
-    { title: 'SITE', dataIndex: 'site', key: 'site' },
-    { title: 'FQDN', dataIndex: 'fqdn', key: "fqdn" }, 
-    { title: '地址', dataIndex: 'address', key: "address" }, 
-    { title: '路径', dataIndex: 'path', key: "path" },
-    { title: '操作', dataIndex: 'handle', key: "handle",
+    { title: '状态', dataIndex: 'level', width:'10%', render: (text, record) => (this.renderTag(record)) }, 
+    { title: '名称', dataIndex: 'name', width:'10%'}, 
+    { title: 'LAB', dataIndex: 'lab', width:'10%'}, 
+    { title: 'SITE', dataIndex: 'site', width:'10%'},
+    { title: 'FQDN', dataIndex: 'fqdn', width:'30%'}, 
+    { title: '地址', dataIndex: 'address',width:'15%'}, 
+    { title: '操作', dataIndex: 'handle', width:'15%',align:'right',
       render: (text, record) => (
         <span>
           <a onClick={() => this.onEdit(record)}>编辑</a>
@@ -69,48 +79,55 @@ class List extends React.Component {
   };
   //编辑服务器
   onEdit = record => {
-    console.log(record)
     this.visible = true;
     this.record = record;
   };
 
-  handleCancel = () => {this.visible = false};
+  handleCancel = () => this.visible = false;
 
   //表单数据发生变化
-  handleFormChange = (changedFields) => {
-    let fieldName = Object.keys(changedFields)[0];
-    Object.keys(this.record).map(key => {
-      if(key === fieldName){
-        this.record[key] = changedFields[fieldName].value;
-      }
-    });
-  };
+  // handleFormChange = (changedFields) => {
+  //   let fieldName = Object.keys(changedFields)[0];
+  //   Object.keys(this.record).map(key => {
+  //     if(key === fieldName){
+  //       this.record[key] = changedFields[fieldName].value;
+  //     }
+  //   });
+  // };
+
   //确认编辑
   handleEdit = () => {
-    this.record.save();
+    let result = this.record.save();
+    if (result) {
+      this.visible = false;
+      message.success('编辑成功！',2);
+    } else {
+      message.error('编辑失败！',2);
+    }
   };
 
   render() {
     return (
       <Fragment>
+        <AdvancedSearchForm/>
         <Table
           style={{height:'55vh'}}
           columns={this.columns}
           dataSource={Array.from(this.sites)}
           rowKey='id'
           size="middle"
+          scroll={{ y: 300 }}
           pagination={this.pagination}
           loading={this.loading}
           onChange={this.tableChange}
         />
-
-        <CollectionEditForm
+        {this.visible ? <CollectionEditForm
           record={this.record}
           visible={this.visible}
           onCancel={this.handleCancel}
-          onEdit={this.handleEdit}
+          onHandleEdit={this.handleEdit}
           onChange={this.handleFormChange}
-        />
+        /> : ''}
       </Fragment>
     );
   }
