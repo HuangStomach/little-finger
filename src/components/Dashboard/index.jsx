@@ -33,7 +33,6 @@ class Station extends Component {
     // 基于准备好的dom，初始化echarts实例
     this.chart = echarts.init(document.getElementById('main'));
     this.renderChart();
-    
     this.disposer = autorun(() => this.renderChart());
     this.fetchServers();
   }
@@ -47,23 +46,27 @@ class Station extends Component {
 
   renderChart() {
     let unit = Math.ceil(Math.sqrt(this.sites.length)) + 2;
-    const data = this.sites.map((item, index) => {
+    let siteStatus = this.props.SiteStore.status;
+    //显示激活的服务器
+    const data = this.sites.filter(item => { return item.active === 1 }).map((item, index) => {
       return {
         value: [
           index % unit, parseInt(index / unit, 10), parseInt(item.level, 10)
         ],
         content: item
-      };
+      }
     }); 
+
     this.chart.setOption({
       tooltip: {
         formatter(data) {
           let content = data.data.content;
-          return `name: ${content.name}<br/>
+          let status = Reflect.get(siteStatus, content.level);
+          return `名称: ${content.name}<br/>
           fqdn: ${content.fqdn}<br/>
-          address: ${content.address}<br/>
-          update: ${content.update}<br/>
-          level: ${content.level}<br/>`
+          地址: ${content.address}<br/>
+          更新时间: ${content.update}<br/>
+          状态: ${status.label}<br/>`
         }
       },
       grid: {

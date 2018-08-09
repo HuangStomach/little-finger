@@ -9,7 +9,7 @@ class Routes {
   children = {
     'dashboard': {
       path: '/', 
-      icon: 'profile', 
+      icon: 'dashboard', 
       text: '监控台', 
       component: Dashboard
     }, 

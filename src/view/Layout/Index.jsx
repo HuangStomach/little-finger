@@ -22,7 +22,7 @@ class Layouts extends React.Component {
     const children = Routes.children;
     return (
       <BrowserRouter>
-        <Layout style={{minHeight: '100vh'}}>
+        <Layout>
           <Sider className={Style.sider}>
             <h2 className={Style.logo}>Genee Nagios</h2>
             <Sidebar/>

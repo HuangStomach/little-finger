@@ -1,56 +1,60 @@
 import React, { Component } from 'react';
-import { computed, observable, action } from "mobx";
+import { computed, observable } from "mobx";
 import { observer } from 'mobx-react';
-import { Button, Drawer, Form, Input, Switch, Icon } from 'antd';
+import { Button, Drawer, Form, Input, Switch, Icon, message } from 'antd';
 import Style from './index.css';
 const FormItem = Form.Item;
-
 @observer
 class CollectionEditForm extends Component {
-  @observable record = {
-    name : '',
-    lab : '',
-    site : '',
-    active : '0',
-  };
-  constructor(props) {
-    super(props);
-    Object.assign(this.record, props.record);
-  }
+  @observable record = { name : '',lab : '',site : '',active : 0 };
+  @observable visible = false;
 
   @computed get fieldItem() {
     return this.props.record;
   }
 
-  @action
   handleChange = e => {
     Reflect.set(this.record, e.target.name, e.target.value);
   }
 
-  @action
-  handleChangeSwitch = (checked) => {
-    this.record.active = checked ? '1' : '0';
+  setRecord(record) {
+    this.record.name = record.name;
+    this.record.lab = record.lab;
+    this.record.site = record.site;
+    this.record.active = record.active;
   }
-  
-  @action
+
+  handleChangeSwitch = (checked) => {
+    this.record.active = checked ? 1 : 0;
+  }
+
   onConfirm = () => {
     this.fieldItem.name = this.record.name;
     this.fieldItem.lab = this.record.lab;
     this.fieldItem.site = this.record.site;
     this.fieldItem.active = this.record.active;
-    this.props.onHandleEdit();
+    this.fieldItem.save().then(data => {
+      if (data) {
+        this.visible = false;
+        this.props.update();
+        message.success('编辑成功！',2);
+      } else {
+        message.error('编辑失败！',2);
+      }
+    });
   }
 
+  onCancel = () => this.visible = false;
+
   render() {
-    const { visible, onCancel } = this.props;
     return (
       <Drawer
         title="编辑服务器"
         width={520}
         placement="right"
-        onClose={onCancel}
+        onClose={this.onCancel}
         maskClosable={false}
-        visible={visible}
+        visible={this.visible}
         className={Style.drawer}
       >
         <Form layout="vertical">
@@ -72,15 +76,15 @@ class CollectionEditForm extends Component {
             onPressEnter={this.onConfirm}
             />
           </FormItem>
-          <FormItem>
+          <FormItem label="激活">
             <Switch name="active" checkedChildren={<Icon type="check" />} 
             unCheckedChildren={<Icon type="cross" />}
-            defaultChecked={this.record.active === '0' ? false : true} 
+            checked={this.record.active === 0 ? false : true}
             onChange={this.handleChangeSwitch} />
           </FormItem>
         </Form>
         <div className={Style.drawer_footer}>
-          <Button style={{ marginRight: 8 }} onClick={onCancel}>
+          <Button style={{ marginRight: 8 }} onClick={this.onCancel}>
             取消
           </Button>
           <Button onClick={this.onConfirm} type="primary">确定</Button>

@@ -26,6 +26,6 @@
 .content{
     padding: 24px;
     background-color: #fff;
-    max-height: 75vh;
-    overflow: auto;
+    overflow: hidden;
+    height: calc(100vh - 64px - 53px);
 }

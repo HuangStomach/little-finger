@@ -1,20 +1,21 @@
 import React, {Fragment} from "react";
-import { Table, message, Tag } from "antd";
-import { computed, observable, trace } from "mobx";
+import { Table, Tag, Tooltip } from "antd";
+import { computed, observable } from "mobx";
 import { inject, observer,  } from 'mobx-react';
 import CollectionEditForm from './edit';
 import AdvancedSearchForm from './search';
-
+import Style from './index.css';
 
 @inject('SiteStore')
 @observer
 class List extends React.Component {
 
+  @observable data = [];
   @observable record = {};
-  @observable visible = false;
   @observable pagination = { size: 'big', pageSize: 20 };
-  @observable loading = false;
+  @observable editComponent = {};//编辑服务器组件的实例
 
+  //渲染服务器的状态列
   renderTag = record => {
     let item = Reflect.get(this.props.SiteStore.status, record.level);
     return (
@@ -22,14 +23,29 @@ class List extends React.Component {
     );
   }
 
-  columns = [
-    { title: '状态', dataIndex: 'level', width:'10%', render: (text, record) => (this.renderTag(record)) }, 
-    { title: '名称', dataIndex: 'name', width:'10%'}, 
-    { title: 'LAB', dataIndex: 'lab', width:'10%'}, 
-    { title: 'SITE', dataIndex: 'site', width:'10%'},
-    { title: 'FQDN', dataIndex: 'fqdn', width:'30%'}, 
-    { title: '地址', dataIndex: 'address',width:'15%'}, 
-    { title: '操作', dataIndex: 'handle', width:'15%',align:'right',
+  @observable columns = [
+    { 
+      title: '状态', dataIndex: 'level', width:'10%', 
+      render: (text, record) => (this.renderTag(record)) }, 
+    { 
+      title: '名称', dataIndex: 'name', width:'20%', 
+      render: (text) => <Tooltip placement="topRight" title={text} arrowPointAtCenter>
+      <span className={Style.text_break} >{text}</span></Tooltip>,
+      sorter: (a, b) => a.name.length - b.name.length,
+    }, 
+    { 
+      title: 'LAB', dataIndex: 'lab', width:'15%', className:'',
+    }, 
+    { 
+      title: 'FQDN', dataIndex: 'fqdn', className:'',width: '30%',
+      render: (text) => <Tooltip placement="topRight" title={text} arrowPointAtCenter>
+      <span className={Style.text_break} >{text}</span></Tooltip>,
+    }, 
+    { 
+      title: '地址', dataIndex: 'address',width:'15%', className:'',
+    }, 
+    { 
+      title: '操作', dataIndex: 'handle', width:'10%',align:'right', className:'',
       render: (text, record) => (
         <span>
           <a onClick={() => this.onEdit(record)}>编辑</a>
@@ -42,92 +58,71 @@ class List extends React.Component {
     return this.props.SiteStore.sites;
   }
 
-  @computed get start() {
-    return this.props.SiteStore.start;
-  }
-
   constructor(props) {
     super(props);
-    this.loading = true;
+    this.fetchServers();
+  }
+
+  fetchServers = () => {
     this.props.SiteStore.list().then(() => {
+      if (this.props.SiteStore.total === this.sites.length) return this.data = this.sites;
+      this.fetchServers();
       this.pagination.total = this.props.SiteStore.total;
-      this.loading = false
+      this.data = this.sites;
     });
   }
 
-  tableChange = pagination => {
-    this.loading = true;
-    let step = pagination.current * 20 - this.sites.length; // 额外需要获取的行数
-    if (step <= 0) {
-      this.loading = false;
-      return; // 如果已经缓存了该数目的行数则不做请求
-    }
-
-    let except = this.sites.length + step; // 记录预期获取行数
-    let fetch = () => {
-      // 每次请求最大限制在50行
-      this.props.SiteStore.list(Math.min(50, step)).then(() => {
-        // 当请求达到了预期或请求已经完成时则不再发起请求
-        if (this.sites.length >= except || this.sites.length === this.props.SiteStore.total) {
-          this.loading = false;
-          return;
-        }
-        fetch();
-      });
-    };
-    fetch();
-  };
-  //编辑服务器
+  //弹出编辑服务器的界面
   onEdit = record => {
-    this.visible = true;
     this.record = record;
+    this.editComponent.visible = true;
+    this.editComponent.setRecord(record);
   };
 
-  handleCancel = () => this.visible = false;
-
-  //表单数据发生变化
-  // handleFormChange = (changedFields) => {
-  //   let fieldName = Object.keys(changedFields)[0];
-  //   Object.keys(this.record).map(key => {
-  //     if(key === fieldName){
-  //       this.record[key] = changedFields[fieldName].value;
-  //     }
-  //   });
-  // };
-
-  //确认编辑
-  handleEdit = () => {
-    let result = this.record.save();
-    if (result) {
-      this.visible = false;
-      message.success('编辑成功！',2);
+  //搜索服务器列表
+  handeleSearch = (condition) => {
+    let newSite = Array.from(this.sites);
+    if( condition ){
+      let result = [];
+      newSite.map(site => {
+        if(site.name.indexOf(condition) > -1 
+        || site.lab.indexOf(condition) > -1
+        || site.site.indexOf(condition) > -1
+        || site.fqdn.indexOf(condition) > -1){
+          result.push(site);
+        }
+      });
+      this.pagination.total = result.length;
+      this.data = result;
     } else {
-      message.error('编辑失败！',2);
+      this.pagination.total = newSite.length;
+      this.data = newSite;
     }
-  };
+  }
+
+  //将子组件CollectionEditForm的实例赋值给editComponent，以便在父组件操作子组件的属性和方法
+  handeleVisible = (editForm) => {
+    this.editComponent = editForm;
+  }
 
   render() {
     return (
       <Fragment>
-        <AdvancedSearchForm/>
+        <AdvancedSearchForm onHandleSerach={this.handeleSearch}/>
         <Table
-          style={{height:'55vh'}}
-          columns={this.columns}
-          dataSource={Array.from(this.sites)}
+          style={{tableLayout:'fixed'}}
+          columns={Array.from(this.columns)}
+          dataSource={Array.from(this.data)}
           rowKey='id'
           size="middle"
-          scroll={{ y: 300 }}
+          scroll={{ y: window.innerHeight - 64 - 53 - 63 - 148 }}
           pagination={this.pagination}
-          loading={this.loading}
-          onChange={this.tableChange}
         />
-        {this.visible ? <CollectionEditForm
+        <CollectionEditForm
           record={this.record}
-          visible={this.visible}
-          onCancel={this.handleCancel}
-          onHandleEdit={this.handleEdit}
-          onChange={this.handleFormChange}
-        /> : ''}
+          ref={this.handeleVisible}
+          update={() => this.forceUpdate()}//数据改变后，强制刷新父组件
+        />
       </Fragment>
     );
   }

@@ -14,3 +14,10 @@
     background: #fff;
     border-radius: 0 0 4px 4px;
 }
+.text_break{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    
+}
