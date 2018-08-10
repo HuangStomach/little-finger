@@ -12,17 +12,31 @@ let setData = (object, data) => {
   return object;
 };
 
-const instance = axios.create({
-  baseURL: 'http://123.59.41.56:4000',
-  timeout: 5000,
-});
+class Axios{
+  constructor(){
+    this.axiosClient = axios.create({
+      baseURL: 'http://123.59.41.56:4000',
+      timeout: 5000,
+    });
+  }
+  static getInstance() {
+    if (!this.instance) {
+      this.instance = new Axios();
+    }
+    return this.instance;
+  }
+}
+
+const client = Axios.getInstance().axiosClient;
+
 
 //TODO: 全部三元运算符导入配置非常不优雅
 export default class Rest {
+
   constructor(path = null, query = null) {
     this._name = this._configs ? this._configs.source : new.target.name.toLowerCase();
     if (path === null && query === null) return this;
-    instance.get(`${this._name}/${path}`, {params: query}).then(r => {setData(this, r.data);}).catch(e => {});
+    client.get(`${this._name}/${path}`, {params: query}).then(r => {setData(this, r.data);}).catch(e => {});
   }
   
   async save() {
@@ -31,12 +45,12 @@ export default class Rest {
     Reflect.deleteProperty(params, '_configs');
     Reflect.deleteProperty(params, '_client');
 
-    if (params.id === 0) return await instance.post(this._name, qs.stringify(params));
-    else return await instance.put(`${this._name}/${params.id}`, qs.stringify(params));
+    if (params.id === 0) return await client.post(this._name, qs.stringify(params));
+    else return await client.put(`${this._name}/${params.id}`, qs.stringify(params));
   }
 
   async delete() {
-    return await instance.delete(`${this._name}/${this.id}`);
+    return await client.delete(`${this._name}/${this.id}`);
   }
 
   static find(query = {}, path = null) {
@@ -51,7 +65,7 @@ export default class Rest {
       import(`model/${name}`)
         .then(m => {
           model = m.default;
-          return instance.get(path ? path : name, {
+          return client.get(path ? path : name, {
             params: query
           });
         })
