@@ -29,10 +29,7 @@ class CollectionEditForm extends Component {
   }
 
   onConfirm = () => {
-    this.fieldItem.name = this.record.name;
-    this.fieldItem.lab = this.record.lab;
-    this.fieldItem.site = this.record.site;
-    this.fieldItem.active = this.record.active;
+    Object.assign(this.fieldItem, this.record);
     this.fieldItem.save().then(data => {
       if (data) {
         this.visible = false;

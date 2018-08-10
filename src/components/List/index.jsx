@@ -42,10 +42,10 @@ class List extends React.Component {
       <span className={Style.text_break} >{text}</span></Tooltip>,
     }, 
     { 
-      title: '地址', dataIndex: 'address',width:'15%', className:'',
+      title: '地址', dataIndex: 'address', width: '15%', className: '',
     }, 
     { 
-      title: '操作', dataIndex: 'handle', width:'10%',align:'right', className:'',
+      title: '操作', dataIndex: 'handle', width: '10%',align: 'right', className: '',
       render: (text, record) => (
         <span>
           <a onClick={() => this.onEdit(record)}>编辑</a>
@@ -82,13 +82,13 @@ class List extends React.Component {
   //搜索服务器列表
   handeleSearch = (condition) => {
     let newSite = Array.from(this.sites);
-    if( condition ){
+    if (condition) {
       let result = [];
       newSite.map(site => {
         if(site.name.indexOf(condition) > -1 
         || site.lab.indexOf(condition) > -1
         || site.site.indexOf(condition) > -1
-        || site.fqdn.indexOf(condition) > -1){
+        || site.fqdn.indexOf(condition) > -1) {
           result.push(site);
         }
       });
