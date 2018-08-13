@@ -1,5 +1,5 @@
 import React, {Fragment} from "react";
-import { Table, Tag, Tooltip } from "antd";
+import { Table, Tag, Tooltip, Switch, Icon } from "antd";
 import { computed, observable } from "mobx";
 import { inject, observer,  } from 'mobx-react';
 import CollectionEditForm from './edit';
@@ -25,8 +25,9 @@ class List extends React.Component {
 
   @observable columns = [
     { 
-      title: '状态', dataIndex: 'level', width:'10%', 
-      render: (text, record) => (this.renderTag(record)) }, 
+      title: '状态', dataIndex: 'level', width:'8%', 
+      render: (text, record) => (this.renderTag(record)) 
+    }, 
     { 
       title: '名称', dataIndex: 'name', width:'20%', 
       render: (text) => <Tooltip placement="topRight" title={text} arrowPointAtCenter>
@@ -34,23 +35,23 @@ class List extends React.Component {
       sorter: (a, b) => a.name.length - b.name.length,
     }, 
     { 
-      title: 'LAB', dataIndex: 'lab', width:'15%', className:'',
+      title: 'LAB', dataIndex: 'lab', width:'10%',
     }, 
     { 
-      title: 'FQDN', dataIndex: 'fqdn', className:'',width: '30%',
+      title: 'FQDN', dataIndex: 'fqdn',
       render: (text) => <Tooltip placement="topRight" title={text} arrowPointAtCenter>
       <span className={Style.text_break} >{text}</span></Tooltip>,
     }, 
     { 
-      title: '地址', dataIndex: 'address', width: '15%', className: '',
+      title: '地址', dataIndex: 'address', width: '20%',
     }, 
     { 
-      title: '操作', dataIndex: 'handle', width: '10%',align: 'right', className: '',
-      render: (text, record) => (
-        <span>
-          <a onClick={() => this.onEdit(record)}>编辑</a>
-        </span>
-      ),
+      title: '激活', dataIndex: 'active', width: '10%', 
+      render: (text, record) => <Switch disabled={true} checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="cross" />} checked={record.active === 1 ? true : false} />
+    }, 
+    { 
+      title: '操作', dataIndex: 'handle', width: '10%',align: 'center', 
+      render: (text, record) => (<span> <a onClick={() => this.onEdit(record)}>编辑</a></span>),
     }
   ];
 
@@ -115,7 +116,7 @@ class List extends React.Component {
           dataSource={Array.from(this.data)}
           rowKey='id'
           size="middle"
-          scroll={{ y: window.innerHeight - 64 - 53 - 63 - 148 }}
+          scroll={{ y: window.innerHeight - 328 }}
           pagination={this.pagination}
         />
         <CollectionEditForm

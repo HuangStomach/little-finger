@@ -2,6 +2,7 @@ import { observable, action } from 'mobx';
 import Site from 'model/site';
 
 class Sites {
+
   @observable sites = [];
   @observable total = -1;
   @observable start = 0;

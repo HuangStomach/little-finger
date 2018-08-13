@@ -1,6 +1,5 @@
 import { observable } from 'mobx';
 import Rest from 'util/rest';
-
 export default class Site extends Rest {
   id = 0;
   name = '';
