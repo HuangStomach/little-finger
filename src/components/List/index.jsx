@@ -2,17 +2,17 @@ import React, {Fragment} from "react";
 import { Table, Tag, Tooltip, Switch, Icon } from "antd";
 import { computed, observable } from "mobx";
 import { inject, observer,  } from 'mobx-react';
-import CollectionEditForm from './edit';
-import AdvancedSearchForm from './search';
+import CollectionEditForm from './Edit';
+import AdvancedSearchForm from './Search';
 import Style from './index.css';
 
 @inject('SiteStore')
 @observer
 class List extends React.Component {
 
-  @observable data = [];
+  @observable condition = '';
   @observable record = {};
-  @observable pagination = { size: 'big', pageSize: 20 };
+  @observable pagination = { size: 'big', pageSize: 20, total: 0 };
   @observable editComponent = {};//编辑服务器组件的实例
 
   //渲染服务器的状态列
@@ -56,7 +56,18 @@ class List extends React.Component {
   ];
 
   @computed get sites() {
-    return this.props.SiteStore.sites;
+    if(this.condition) {
+      return this.props.SiteStore.sites.filter(site => {
+        return (
+          site.name.indexOf(this.condition) > -1 || 
+          site.lab.indexOf(this.condition) > -1 || 
+          site.site.indexOf(this.condition) > -1 || 
+          site.fqdn.indexOf(this.condition) > -1
+        )
+      });
+    } else {
+      return this.props.SiteStore.sites;
+    }
   }
 
   constructor(props) {
@@ -66,10 +77,9 @@ class List extends React.Component {
 
   fetchServers = () => {
     this.props.SiteStore.list().then(() => {
-      if (this.props.SiteStore.total === this.sites.length) return this.data = this.sites;
+      if (this.props.SiteStore.total === this.sites.length) return ;
       this.fetchServers();
       this.pagination.total = this.props.SiteStore.total;
-      this.data = this.sites;
     });
   }
 
@@ -82,23 +92,8 @@ class List extends React.Component {
 
   //搜索服务器列表
   handeleSearch = (condition) => {
-    let newSite = Array.from(this.sites);
-    if (condition) {
-      let result = [];
-      newSite.map(site => {
-        if(site.name.indexOf(condition) > -1 
-        || site.lab.indexOf(condition) > -1
-        || site.site.indexOf(condition) > -1
-        || site.fqdn.indexOf(condition) > -1) {
-          result.push(site);
-        }
-      });
-      this.pagination.total = result.length;
-      this.data = result;
-    } else {
-      this.pagination.total = newSite.length;
-      this.data = newSite;
-    }
+    this.condition = condition;
+    this.pagination.total = this.sites.length;
   }
 
   //将子组件CollectionEditForm的实例赋值给editComponent，以便在父组件操作子组件的属性和方法
@@ -111,9 +106,8 @@ class List extends React.Component {
       <Fragment>
         <AdvancedSearchForm onHandleSerach={this.handeleSearch}/>
         <Table
-          style={{tableLayout:'fixed'}}
           columns={Array.from(this.columns)}
-          dataSource={Array.from(this.data)}
+          dataSource={Array.from(this.sites)}
           rowKey='id'
           size="middle"
           scroll={{ y: window.innerHeight - 328 }}

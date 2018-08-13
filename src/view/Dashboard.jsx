@@ -1,5 +1,5 @@
 import React from "react";
-import DashboardIndex from "@/Dashboard/index";
+import DashboardIndex from "@/Dashboard/Index";
 import Routes from 'store/modules/routes';
 
 class Dashboard extends React.Component {

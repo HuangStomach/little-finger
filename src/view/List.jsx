@@ -1,5 +1,5 @@
 import React from "react";
-import ListIndex from "@/List/index";
+import ListIndex from "@/List/Index";
 import Routes from 'store/modules/routes';
 
 class List extends React.Component {

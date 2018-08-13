@@ -18,10 +18,7 @@ class CollectionEditForm extends Component {
   }
 
   setRecord(record) {
-    this.record.name = record.name;
-    this.record.lab = record.lab;
-    this.record.site = record.site;
-    this.record.active = record.active;
+    Object.assign(this.record,record);
   }
 
   handleChangeSwitch = (checked) => {

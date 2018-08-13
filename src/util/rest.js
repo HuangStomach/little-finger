@@ -1,5 +1,5 @@
 import qs from 'qs';
-import Client from '../store/modules/client'
+import Client from 'store/modules/client'
 
 let setData = (object, data) => {
   if (typeof object.setData === 'function') return object.setData(data);
@@ -60,9 +60,7 @@ export default class Rest {
         }, r => {
           reject();
         })
-        .catch(() => {
-          console.log(32323)
-        });
+        .catch(() => {});
     });
   }
 }
