@@ -78,7 +78,7 @@ class List extends React.Component {
   fetchServers = () => {
     this.props.SiteStore.list().then(() => {
       if (this.props.SiteStore.total === this.sites.length) return ;
-      this.fetchServers();
+      this.fetchServers(); 
       this.pagination.total = this.props.SiteStore.total;
     });
   }

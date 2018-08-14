@@ -4,7 +4,7 @@ import { Form, Row, Col, Input, Button, Icon } from 'antd';
 const FormItem = Form.Item;
 class AdvancedSearchForm extends React.Component {
   keyword = '';
-
+  
   handleChange = e => {
     this.keyword = e.target.value.replace(/^\s+|\s+$/g,"");
   }
