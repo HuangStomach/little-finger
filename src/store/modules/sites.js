@@ -18,6 +18,12 @@ class Sites {
     '60': { value: 60, color: '#CC00FF', label: 'GG' },
   };
 
+  @action 
+  clearData = () => {
+    this.sites = [];
+    this.start = 0;
+  }
+
   @action
   setStart = start => this.start = start;
 

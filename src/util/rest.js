@@ -9,6 +9,7 @@ let setData = (object, data) => {
       Reflect.set(object, key, value)
     }
   }
+  
   return object;
 };
 
@@ -18,7 +19,13 @@ export default class Rest {
     this._client = Client.get(new.target.name);
     this._name = this._configs ? this._configs.source : new.target.name.toLowerCase();
     if (path === null && query === null) return this;
-    this._client.get(`${this._name}/${path}`, {params: query}).then(r => {setData(this, r.data);}).catch(e => {});
+    return new Promise((resolve, reject) => {
+      this._client.get(`${this._name}/${path}`, {params: query})
+      .then(r => {
+        resolve(setData(this, r.data));
+      })
+      .catch(e => {});
+    });
   }
   
   async save() {

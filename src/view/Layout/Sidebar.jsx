@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import { Menu, Icon } from "antd";
 import { Link } from 'react-router-dom';
 import Routes from 'store/modules/routes';
-
+const SubMenu = Menu.SubMenu;
 @observer
 class Sidebar extends React.Component {
   @computed get current() {
@@ -15,11 +15,11 @@ class Sidebar extends React.Component {
     const children = Routes.children;
     return (
       <Menu theme="dark" mode="inline" selectedKeys={[this.current]}>
-        {Object.keys(children).map(key => 
-          <Menu.Item key={key}>
-            <Link to={children[key].path}>
-              <Icon type={children[key].icon}/>
-              <span>{children[key].text}</span>
+        {Object.keys(children).map(subkey => 
+          <Menu.Item key={subkey}>
+            <Link to={children[subkey].path}>
+              <Icon type={children[subkey].icon}/>
+              <span>{children[subkey].text}</span>
             </Link>
           </Menu.Item>
         )}
