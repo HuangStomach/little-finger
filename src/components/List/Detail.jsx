@@ -14,7 +14,7 @@ const FormItem = Form.Item;
 class Detail extends Component {
   @observable editStatus = false;
   @observable site = {};
-  @observable record = {name:'', lab:'', site:'', fqdn:'', address:'', active:0, path:'', level:0 };
+  @observable record = {name:'', lab:'', site:'', fqdn:'', address:'', active:0, path:'', level:0, free:0, top:0 };
 
   //获取服务器的状态
   @computed get status() {
@@ -85,6 +85,9 @@ class Detail extends Component {
       return <a href="#" onClick={this.onEdit}>编辑</a>;
     }
   }
+  renderChart = () => {
+    alert(323)
+  }
 
   render() {
     const formItemLayout = {
@@ -96,6 +99,11 @@ class Detail extends Component {
         xs: { span: 24 },
         sm: { span: 15 },
       },
+    };
+    const gridStyle = {
+      width: '50%',
+      textAlign: 'center',
+      cursor: 'pointer',
     };
       
     return (
@@ -191,38 +199,12 @@ class Detail extends Component {
               </Row>
             </Card>
           </Col>
+
           <Col span={8}>
-            <Card title="Card title" bordered={false}>
-              <Row type='flex'>
-                <Col span={24}>
-                <FormItem label="负载" {...formItemLayout}>
-                  <Input type="text" name="free"  placeholder="请输入服务器名称"
-                  onChange={this.handleChange}
-                  onPressEnter={this.onConfirm}
-                  />
-                </FormItem>
-                </Col>
-              </Row>
-              <Row type='flex'>
-                <Col span={24}>
-                <FormItem label="剩余容量" {...formItemLayout}>
-                  <Input type="text" name="free"  placeholder="请输入服务器名称"
-                  onChange={this.handleChange}
-                  onPressEnter={this.onConfirm}
-                  />
-                </FormItem>
-                </Col>
-              </Row>
-              <Row>
-                <Col span={24}>
-                  <FormItem label="报警等级" {...formItemLayout}>
-                    <Input type="text" name="level"  placeholder="请输入报警等级"
-                    onChange={this.handleChange}
-                    onPressEnter={this.onConfirm}
-                    />
-                  </FormItem>
-                  </Col>
-              </Row>
+            <Card title="参数分析" bordered={false}>
+              <Card.Grid style={gridStyle} onClick={this.renderChart}><h4>负载</h4><p>{this.record.top}</p></Card.Grid>
+              <Card.Grid style={gridStyle}><h4>磁盘剩余容量</h4><p>{this.record.free}%</p></Card.Grid>
+              <Card.Grid style={gridStyle}><h4>报警等级</h4><p>{this.record.level}</p></Card.Grid>
             </Card>
           </Col>
       </Row>

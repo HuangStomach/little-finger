@@ -53,7 +53,7 @@ class List extends React.Component {
     }, 
     { 
       title: '操作', dataIndex: 'handle', width: '10%',align: 'center', 
-      render: (text, record) => (<span><Link to={{pathname: '/list/detail/'+record.id}}>详情</Link><Divider type="vertical" /><a onClick={(e) => this.onEdit(e,record)}>编辑</a></span>),
+      render: (text, record) => (<span><Link to={{pathname: '/list/detail/'+record.id}}>详情</Link><Divider type="vertical" /><a onClick={() => this.onEdit(record)}>编辑</a></span>),
     }
   ];
 
