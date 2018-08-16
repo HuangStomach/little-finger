@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
-import { computed, observable, action } from "mobx";
+import { computed, observable } from "mobx";
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom' ;
 import Site from 'model/site';
-import { Form, Button, Col, Row, Input, Card, Switch, Icon, Tag, Divider, message } from 'antd';
+import { Form, Button, Row, Col, Input, Card, Switch, Icon, Tag, Divider, message } from 'antd';
 import Style from './index.css';
 import Routes from 'store/modules/routes';
 
@@ -16,6 +16,7 @@ class Detail extends Component {
   @observable site = {};
   @observable record = {name:'', lab:'', site:'', fqdn:'', address:'', active:0, path:'', level:0 };
 
+  //获取服务器的状态
   @computed get status() {
     let item = Reflect.get(this.props.SiteStore.status, this.record.level);
     return (
@@ -35,6 +36,7 @@ class Detail extends Component {
     this.getRecord(this.recordId);
   }
 
+  //获取服务器信息
   getRecord = id => {
     new Site(id).then(record => {
       this.site = record;
@@ -50,10 +52,12 @@ class Detail extends Component {
     this.record.active = checked ? 1 : 0;
   }
 
+  //编辑服务器信息
   onEdit = () => {
     this.editStatus = true;
   }
 
+  //保存编辑的服务器信息
   onSave = () => {
     Object.assign(this.site, this.record);
     this.site.save().then(data => {
@@ -67,6 +71,7 @@ class Detail extends Component {
     });
   }
 
+  //取消编辑操作
   onCancel = () => {
     this.editStatus = false;
     this.getRecord(this.recordId);
