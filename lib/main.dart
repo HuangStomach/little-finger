@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'home.dart';
+import 'words.dart';
 
 void main() => runApp(App());
 
@@ -9,14 +9,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Welcome to Flutter'),
-        ),
-        body: Center(
-          child: Text('Hello World'),
-        ),
-      ),
+      home: Words()
     );
   }
 }
