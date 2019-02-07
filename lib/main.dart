@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'words.dart';
+import 'home.dart';
 
 void main() => runApp(App());
 
@@ -7,12 +7,10 @@ class App extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final appTitle = 'Opacity Demo';
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: new ThemeData(
-        primaryColor: Colors.white
-      ),
-      home: Words()
+      title: appTitle,
+      home: Home(title: appTitle),
     );
   }
 }
