@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './list.dart';
 
 class Home extends StatefulWidget {
   final String title;
@@ -16,9 +17,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title)
-      ),
+      appBar: AppBar(title: Text(widget.title)),
       body: Center(
         child: AnimatedOpacity(
           opacity: _visible ? 1.0 : 0.0,
@@ -30,6 +29,7 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
+      drawer: List(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
