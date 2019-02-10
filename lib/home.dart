@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import './list.dart';
-import './snack.dart';
+import './grid.dart';
 
 class Home extends StatefulWidget {
   final String title;
@@ -19,7 +19,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
-      body: Snack(),
+      body: Grid(),
       drawer: List(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
