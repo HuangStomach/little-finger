@@ -12,23 +12,18 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  // Whether the green box should be visible or invisible
-  bool _visible = true;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
       body: Grid(),
       drawer: List(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _visible = !_visible;
-          });
-        },
-        tooltip: 'Toggle Opacity',
-        child: Icon(Icons.flip),
+      floatingActionButton: Theme(
+        data: Theme.of(context).copyWith(accentColor: Colors.yellow),
+        child: FloatingActionButton(
+          onPressed: null,
+          child: Icon(Icons.add),
+        ),
       ),
     );
   }
